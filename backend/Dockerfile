@@ -1,7 +1,7 @@
-FROM openjdk:16.0.1-slim AS build
+FROM maven:3.8.3-openjdk-17-slim AS build
 COPY . /build
 WORKDIR /build
-RUN chmod +x ./mvnw && ./mvnw clean package install -DskipTests
+RUN mvn clean package install -DskipTests
 
 FROM openjdk:16.0.1-slim
 COPY --from=build /build/target/*.jar /
