@@ -17,6 +17,6 @@ Each component can be replaced with custom part to improve the system as you lik
 
 1. Install the latest `docker` and `docker-compose`.
 2. Clone the `git` repository.
-3. Put any `server.jar` into `minecraft/server` folder.
+3. Put any server `.jar` file into `minecraft/server` folder.
 4. Go to the root folder (where `docker-compose.yml` is).
 5. Run `docker-compose up -d`
