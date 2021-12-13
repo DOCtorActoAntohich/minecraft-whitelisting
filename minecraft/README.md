@@ -1,4 +1,5 @@
-# Game server directory
+# Minecraft
+## Game server directory (`/server`)
 We put files `eula.txt` with the confirmed agreement and `server.properties` with enabled whitelist to the `server/` folder so that it is not needed to change these files manually.
 By launching the game server, you agree to [Minecraft EULA](https://account.mojang.com/documents/minecraft_eula).
 
