@@ -1,0 +1,86 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width,initial-scale=1.0">
+        <link rel="stylesheet" href="index.css">
+        <title>Minecraft Server Whitelist</title>
+    </head>
+    <body>
+        <form onsubmit="Submit(event)">            
+            <div id="message-wrap" class="wrap hidden">
+                <div id="success">You were added to the whitelist!</div>
+                <div id="error">An error occured :(</div>
+            </div>
+            <div id="fields-wrap" class="wrap">
+                <input type="text" placeholder="Nickname" required id="nick">
+                <input type="text" placeholder="E-mail" required id="email">
+                    <div id="code-wrap" class="wrap hidden">
+    	               <input type="text" placeholder="Confirmation code" id="code">
+    	            </div>
+                <input type="submit" value="Submit">
+            </div>
+        </form>
+    </body>
+    <script>
+        function showSuccess() {
+            document.querySelector('#message-wrap').classList.remove('hidden');
+            document.querySelector('#success').classList.remove('hidden');
+        }
+        function showError(text) {
+            document.querySelector('#message-wrap').classList.remove('hidden');
+            document.querySelector('#error').innerText = text;
+            document.querySelector('#error').classList.remove('hidden');
+        }
+        let counter = 0;
+        async function Submit (event) {
+            event.preventDefault();	
+            let nick = document.querySelector('#nick').value;
+            let email = document.querySelector('#email').value;
+            document.querySelector('#message-wrap').classList.add('hidden');
+            document.querySelector('#success').classList.add('hidden');
+            document.querySelector('#error').classList.add('hidden');
+            if (counter === 0) {
+                let response = await fetch("http://" + location.hostname + ":8080/user/register", {
+                    method: 'POST',
+                    headers: {
+                      'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({nickname: nick, email: email})
+                });
+                if (response.ok) {
+                    response = await response.json();
+                    if (response.ok) {
+                       counter++;
+                       document.querySelector('#code-wrap').classList.remove('hidden');
+                       document.querySelector('#code').required = true;
+                       let nick = document.querySelector('#nick').readOnly = true;
+                       let email = document.querySelector('#email').readOnly = true;
+                    }
+                    else {
+                        showError(response.message);
+                    }
+                }
+            }
+            else if (counter === 1) {
+                let code = document.getElementById('code').value;
+                let response = await fetch("http://" + location.hostname + ":8080/user/confirm", {
+                    method: 'POST',
+                    headers: {
+                      'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({nickname: nick, email: email, code: code})
+                });
+                if (response.ok) {
+                    response = await response.json();
+                    if (response.ok) {
+                        document.querySelector('#fields-wrap').classList.add('hidden');
+                        showSuccess();
+                    }
+                    else {
+                        showError(response.message);
+                    }
+                }
+            }
+        }
+    </script>
+</html>

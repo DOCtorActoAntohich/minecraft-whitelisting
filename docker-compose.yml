@@ -1,0 +1,57 @@
+version: '3.9'
+volumes:
+  console:
+
+services:
+  web:
+    image: nginx:alpine
+    ports:
+     - 80:80
+    depends_on:
+     - backend
+    volumes:
+     - ./web/data:/usr/share/nginx/html:ro
+     - ./web/default.conf:/etc/nginx/conf.d/default.conf:ro
+    restart: always
+  backend:
+    build: ./backend
+    ports:
+     - 8080:8080
+    depends_on:
+     - database
+     - whitelist
+    entrypoint: ["java","-jar","/app.jar"]
+    restart: always
+  database:
+    build: ./database
+    expose:
+     - 5432
+    volumes:
+     - ./database/db/data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: whitelist
+    restart: always
+  whitelist:
+    build: ./whitelist
+    expose:
+     - 8080
+    depends_on:
+     - minecraft
+    volumes:
+     - ./minecraft/server:/server:ro  # we won't modify anything there
+     - ./whitelist/whitelist.py:/web/whitelist.py:ro
+     - console:/console
+    entrypoint: ["python3.9", "-u", "/web/whitelist.py", "/console/input", "/server"]
+    init: true
+    restart: always
+  minecraft:
+    build: ./minecraft
+    ports:
+     - 25565:25565
+    volumes:
+     - ./minecraft/server:/server
+     - console:/console
+    working_dir: /server
+    entrypoint: ["/entrypoint.sh"]
+    restart: always

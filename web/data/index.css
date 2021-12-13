@@ -1,0 +1,72 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500&family=Roboto:wght@300&display=swap');
+
+body {
+    margin: 0;
+    padding: 0;
+    background-image: url("mine.jpg");
+    background-size: cover;
+}
+
+form {
+    margin: 200px auto;
+    background: white;
+    border-radius: 50px;
+    max-width: 300px;
+    text-align: center;
+    padding: 30px;
+}
+
+input[type="text"] {
+    width: 90%;
+    padding: 10px;
+    font-family: Roboto, sans-serif;
+    font-weight: 300;
+    font-size: 18px;
+    margin: 10px auto;
+    border: 0.1em solid rgba(128, 128, 128, 0.7);
+}
+
+input[type="text"][readonly] {
+    background: rgba(128, 128, 128, 0.3);
+}
+
+input[type="submit"] {
+    margin: 15px auto;
+    border: none;
+    padding: 10px 25px 10px 25px;
+    border-radius: 10px;
+    font-family: Roboto, sans-serif;
+    font-weight: 300;
+    font-size: 18px;
+    cursor: pointer;
+}
+
+.wrap {
+    transition: all 0.3s;
+    max-height: 20em;
+}
+
+.wrap.hidden {
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+}
+
+#error, #success {
+    border: 0.1em solid rgba(0, 0, 0, 0.3);
+    font: 1em 'Roboto', sans-serif;
+    text-align: left;
+    padding: 0.5em;
+}
+
+#error.hidden, #success.hidden {
+    display: none;
+}
+
+#success {
+    background: rgba(30, 255, 30, 0.3);
+}
+
+#error {
+    background: rgba(255, 30, 30, 0.3);
+}
